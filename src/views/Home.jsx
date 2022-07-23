@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { usePrismicDocumentByUID, useSinglePrismicDocument, useAllPrismicDocumentsByType } from '@prismicio/react'
 
 export default function Home() {
@@ -6,6 +6,17 @@ export default function Home() {
     const [home] = usePrismicDocumentByUID('page', 'home-uid')
     const [destaques] = useSinglePrismicDocument('destaques')
     const [post] = useAllPrismicDocumentsByType('post')
+
+    const [posts, setPosts] = useState();
+
+    function paginatePosts(qtd) {
+        const filtredPosts = post?.slice(0, qtd)
+        setPosts(filtredPosts)
+    }
+
+    useEffect(() => {
+        paginatePosts(2)
+    }, [post]);
 
 
     return (
@@ -28,7 +39,7 @@ export default function Home() {
             <section className="py-12">
                 <h2 className="text-xl font-bold">Posts</h2>
                 <div className="flex flex-col">
-                    {post?.map(item => (
+                    {posts?.map(item => (
                         <a href={`/post/${item.uid}`} key={item.id}>{item.data.titulo_do_post}</a>
                     ))}
                 </div>
