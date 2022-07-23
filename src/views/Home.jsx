@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { usePrismicDocumentByUID, useSinglePrismicDocument, useAllPrismicDocumentsByType } from '@prismicio/react'
+import { RichText } from 'prismic-dom';
 
 export default function Home() {
 
     const [home] = usePrismicDocumentByUID('page', 'home-uid')
     const [destaques] = useSinglePrismicDocument('destaques')
+    const [postDetalhado] = useSinglePrismicDocument('post_detalhado')
     const [post] = useAllPrismicDocumentsByType('post')
+
 
     const [posts, setPosts] = useState();
 
@@ -44,6 +47,18 @@ export default function Home() {
                     ))}
                 </div>
             </section>
+            <section className="py-12">
+                <h2 className="text-xl font-bold">Post detalhado</h2>
+                <div className="flex flex-col">
+                    {postDetalhado &&
+                        <div
+                            dangerouslySetInnerHTML={{ __html: RichText.asHtml(postDetalhado.data.conteudo) }}
+                        />
+                    }
+                </div>
+            </section>
+
+
 
         </div>
     )
